@@ -371,7 +371,7 @@ class MessageSendMixin(object):
             raise ValueError(
                 "smtp must be a dict or an object with method 'sendmail'. got %s" % type(smtp))
 
-        to_addrs = None
+        to_addrs = []
 
         if to:
             if set_mail_to:
@@ -379,7 +379,7 @@ class MessageSendMixin(object):
             else:
                 to_addrs = [a[1] for a in parse_name_and_email_list(to)]
 
-        to_addrs = to_addrs or self.get_recipients_emails()
+        to_addrs = list(set(to_addrs + self.get_recipients_emails()))
 
         if not to_addrs:
             raise ValueError('No to-addr')
